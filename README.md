@@ -230,7 +230,3 @@ curl -X POST http://localhost:8000/query \
 ## Screenshots
 
 *(Add screenshots of the running app here: the Streamlit chat interface with a question and cited answer, and the FastAPI Swagger docs at `/docs`.)*
-
-## License
-
-Add a license of your choice (e.g. MIT) if this is meant to be reused by others.
