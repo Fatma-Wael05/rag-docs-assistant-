@@ -1,0 +1,210 @@
+[
+  {
+    "question": "How do I create an agent in CrewAI?",
+    "answer": "You can create an agent in CrewAI in two ways: using **JSONC project configuration** (recommended for new crews) or defining it **directly in code** [1].\n\nTo create an agent directly in code, you can instantiate the `Agent` class and pass in various parameters, as shown in the example in [3]. This example demonstrates all available parameters for creating an agent, including its role, goal, backstory, LLM, and tools [3].\n\nAlternatively, you can use the Visual Agent Builder, which enables intuitive agent configuration and testing without writing code [2]. The Visual Agent Builder is part of the CrewAI AMP and is designed to simplify agent creation and configuration [2].\n\nYou can also use the `crewai` package to create agents directly in code, as shown in the example in [4]. This example demonstrates how to create agents and tasks, and how to assemble a crew with planning enabled [4].\n\nReferences:\n\n[1] Source: crewai_agents.md\n[2] Source: crewai_agents.md\n[3] Source: crewai_agents.md\n[4] Source: crewai_tools.md",
+    "sources": [
+      "crewai_agents.md",
+      "crewai_agents.md",
+      "crewai_agents.md",
+      "crewai_tools.md"
+    ],
+    "retrieved_chunk_ids": [
+      "crewai_agents.md::10",
+      "crewai_agents.md::0",
+      "crewai_agents.md::15",
+      "crewai_tools.md::3"
+    ]
+  },
+  {
+    "question": "How do I define a state and connect nodes in a LangGraph workflow?",
+    "answer": "To define a state and connect nodes in a LangGraph workflow, you first need to define the shared data structure that represents the current snapshot of your application, which is called `State` [n] [1]. This can be any data type, but is typically defined using a shared state schema.\n\nNext, you need to define the nodes, which are functions that encode the logic of your agents. They receive the current state as input, perform some computation or side-effect, and return an updated state. Nodes are added to a graph using the `add_node` method [n] [3].\n\nTo connect the nodes, you can use the `add_edge` method to add a directed edge between two nodes. You can also use the `add_conditional_edges` method to add conditional edges based on the current state [n] [4].\n\nHere is an example of how to define a state and connect nodes:\n```python\nfrom dataclasses import dataclass\nfrom typing_extensions import TypedDict\n\nfrom langgraph.graph import StateGraph\nfrom langgraph.runtime import Runtime\n\nclass State(TypedDict):\n    input: str\n    results: str\n\nbuilder = StateGraph(State)\n\ndef node1(state: State):\n    return state\n\ndef node2(state: State):\n    return {\"results\": f\"Hello, {state['input']}!\"}\n\nbuilder.add_node(\"node1\", node1)\nbuilder.add_node(\"node2\", node2)\nbuilder.add_edge(\"node1\", \"node2\")\n```\nNote that this is a simplified example, and in a real-world scenario, you would likely have more complex nodes and edges.",
+    "sources": [
+      "langgraph_graph_api.md",
+      "langgraph_graph_api.md",
+      "langgraph_graph_api.md",
+      "langgraph_graph_api.md"
+    ],
+    "retrieved_chunk_ids": [
+      "langgraph_graph_api.md::0",
+      "langgraph_graph_api.md::46",
+      "langgraph_graph_api.md::26",
+      "langgraph_graph_api.md::69"
+    ]
+  },
+  {
+    "question": "How can I build a RAG pipeline using LlamaIndex?",
+    "answer": "Unfortunately, the provided context does not contain enough information to provide a complete answer on how to build a RAG pipeline using LlamaIndex. However, it does mention that you can check out the RAG tutorial [n] and the Production RAG Webinar [n] for more information.",
+    "sources": [
+      "llamaindex_production_rag.md",
+      "llamaindex_building_rag.md",
+      "llamaindex_production_rag.md",
+      "langchain_knowledge_base.md"
+    ],
+    "retrieved_chunk_ids": [
+      "llamaindex_production_rag.md::0",
+      "llamaindex_building_rag.md::6",
+      "llamaindex_production_rag.md::1",
+      "langchain_knowledge_base.md::22"
+    ]
+  },
+  {
+    "question": "How do I give an agent a tool in LangChain?",
+    "answer": "There are several ways to give an agent a tool in LangChain:\n\n1. Using the CrewAI Toolkit: You can create a tool from the CrewAI Toolkit and add it to the agent using the `tools` parameter in the `Agent` constructor, as shown in [1] (crewai_agents.md):\n```python\nfrom crewai import Agent\nfrom crewai_tools import SerperDevTool, WikipediaTools\n\n# Create tools\nsearch_tool = SerperDevTool()\nwiki_tool = WikipediaTools()\n\n# Add tools to agent\nresearcher = Agent(\n    role=\"AI Technology Researcher\",\n    goal=\"Research the latest AI developments\",\n    tools=[search_tool, wiki_tool],\n    verbose=True\n)\n```\n2. Using the LangChain Tools: You can create a tool from the LangChain Tools and add it to the agent using the `tools` parameter in the `Agent` constructor, as shown in [1] (crewai_agents.md):\n```python\nfrom langchain.agents import create_agent\nfrom langchain_tools import WebSearchTool\n\n# Create tool\nsearch_tool = WebSearchTool()\n\n# Add tool to agent\nagent = create_agent(\"claude-sonnet-4-6\", [search_tool])\n```\n3. Using the MCP Adapter: You can connect to an MCP server and adapt its tools into LangChain tools using the `MCPAdapter` class, as shown in [2] (langchain_tools.md):\n```python\nfrom langchain.agents import create_agent\nfrom langchain.mcp import MCPAdapter\n\nasync with MCPAdapter(\"https://example.com/mcp\") as adapter:\n    tools = await adapter.list_tools()\n    agent = create_agent(\"claude-sonnet-4-6\", tools)\n```\n4. Using Prebuilt Tools: LangChain provides a large collection of prebuilt tools and toolkits that can be directly integrated into your agents without writing custom code, as shown in [3] (langchain_tools.md).\n\nYou can choose the method that best fits your needs.",
+    "sources": [
+      "crewai_agents.md",
+      "langchain_tools.md",
+      "langchain_tools.md",
+      "langgraph_overview.md"
+    ],
+    "retrieved_chunk_ids": [
+      "crewai_agents.md::23",
+      "langchain_tools.md::46",
+      "langchain_tools.md::45",
+      "langgraph_overview.md::0"
+    ]
+  },
+  {
+    "question": "How does CrewAI handle memory for agents?",
+    "answer": "According to [1] and [2], CrewAI handles memory for agents in the following way:\n\n* Agents can maintain memory of their interactions and use context from previous tasks when `memory=True` is enabled ([2]).\n* When `memory=True`, the crew creates a default `Memory()` and passes the crew's `embedder` configuration through automatically. All agents in the crew share the crew's memory unless an agent has its own ([3]).\n* Without a custom `embedder`, memory uses OpenAI `text-embedding-3-large` embeddings ([1]).\n\nTherefore, the answer is that CrewAI handles memory for agents by allowing them to share the crew's memory and using an embedder to configure memory settings.",
+    "sources": [
+      "crewai_memory.md",
+      "crewai_agents.md",
+      "crewai_memory.md",
+      "crewai_memory.md"
+    ],
+    "retrieved_chunk_ids": [
+      "crewai_memory.md::4",
+      "crewai_agents.md::24",
+      "crewai_memory.md::3",
+      "crewai_memory.md::0"
+    ]
+  },
+  {
+    "question": "How can I add persistence to a LangGraph application?",
+    "answer": "To add persistence to a LangGraph application, you can use either Checkpointers or Stores. Checkpointers persist a thread's graph state as checkpoints, which is useful for short-term, thread-scoped memory, including conversation continuity, human-in-the-loop workflows, time travel, and fault tolerance [1]. Stores, on the other hand, persist application-defined data outside the graph state, which is useful for long-term, cross-thread memory [1].\n\nTo use Checkpointers, you can use the `/oss/langgraph/checkpointers` module. To use Stores, you can use the `BaseStore` class, which provides persistent storage that survives across conversations [3]. The store uses a namespace/key pattern to organize data, and you can access it through `runtime.store` [3]. For production deployments, you should use a persistent store implementation like `PostgresStore`, `MongoDBStore`, or `RedisStore` instead of `InMemoryStore` [3].",
+    "sources": [
+      "langgraph_persistence.md",
+      "langgraph_overview.md",
+      "langchain_tools.md",
+      "langgraph_overview.md"
+    ],
+    "retrieved_chunk_ids": [
+      "langgraph_persistence.md::0",
+      "langgraph_overview.md::6",
+      "langchain_tools.md::12",
+      "langgraph_overview.md::0"
+    ]
+  },
+  {
+    "question": "How do I retrieve information from an indexed data source in LlamaIndex?",
+    "answer": "To retrieve information from an indexed data source in LlamaIndex, you can use the `Retriever` interface exposed by the `Index` objects [1]. The most common index, `VectorStoreIndex`, has a usage guide available [2] that explains how to use it. Additionally, you can check out the guide to how each index works [2] to help you decide which one matches your use-case.\n\nOnce you have chosen the index, you can use the `Retriever` interface to query the data. The `Retriever` interface supports additional configuration and automation [1].\n\nIf you are building a Retrieval-Augmented Generation (RAG) use-case, you can use the `Index` as the core foundation for retrieval [1].",
+    "sources": [
+      "llamaindex_indexing.md",
+      "llamaindex_indexing.md",
+      "llamaindex_building_rag.md",
+      "llamaindex_building_rag.md"
+    ],
+    "retrieved_chunk_ids": [
+      "llamaindex_indexing.md::0",
+      "llamaindex_indexing.md::1",
+      "llamaindex_building_rag.md::10",
+      "llamaindex_building_rag.md::1"
+    ]
+  },
+  {
+    "question": "How do I create an agent?",
+    "answer": "To create an agent, you can use the `create_agent` function, which is highly extensible and customizable. You can configure the basics directly with the `model=`, `tools=`, and `system_prompt=` parameters, or extend the harness with middleware for more advanced capabilities.\n\nIf you want to create a deep agent, you can use the `create_deep_agent` function, which comes with commonly useful capabilities already assembled, such as planning, file system tools, subagents, and memory.\n\nYou can refer to the [2] and [4] sources for more information on how to create an agent using `create_agent` and `create_deep_agent` functions.\n\nAdditionally, the [3] source provides a quickstart guide on how to get started with agents, and the [1] source provides an overview of what an agent is and what it can do in the CrewAI framework.",
+    "sources": [
+      "crewai_agents.md",
+      "langchain_agents.md",
+      "langgraph_workflows_agents.md",
+      "langchain_agents.md"
+    ],
+    "retrieved_chunk_ids": [
+      "crewai_agents.md::0",
+      "langchain_agents.md::10",
+      "langgraph_workflows_agents.md::25",
+      "langchain_agents.md::0"
+    ]
+  },
+  {
+    "question": "How do I give an agent access to tools?",
+    "answer": "To give an agent access to tools, you can use the `create_agent` function from the `langchain.agents` module [2]. This function allows you to configure the harness with various parameters, including `model`, `tools`, and `middleware`. To add tools to the agent, you can pass a list of tools to the `tools` parameter when creating the agent [2]. For example:\n```python\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=[public_search, private_search, advanced_search]\n)\n```\nThis will give the agent access to the `public_search`, `private_search`, and `advanced_search` tools.\n\nAlternatively, you can use the `wrap_model_call` decorator from the `langchain.agents.middleware` module to dynamically filter tools based on the conversation state [1]. This is useful if you want to expose different tools to the agent based on the user's authentication state or other conditions.\n\nNote that the `tools` parameter expects a list of tool instances, not just their names [2]. If you want to use pre-built tools from the `CrewAI Toolkit` or `LangChain Tools`, you can import them and pass them to the `tools` parameter as shown above.",
+    "sources": [
+      "langchain_tools.md",
+      "langchain_agents.md",
+      "crewai_tools.md",
+      "crewai_tools.md"
+    ],
+    "retrieved_chunk_ids": [
+      "langchain_tools.md::30",
+      "langchain_agents.md::0",
+      "crewai_tools.md::1",
+      "crewai_tools.md::0"
+    ]
+  },
+  {
+    "question": "How can I build a multi-agent system where different agents work together?",
+    "answer": "To build a multi-agent system where different agents work together, you can use the patterns outlined in the provided context. According to [1] and [3], multi-agent patterns are valuable when a single agent has too many tools and makes poor decisions about which to use, when tasks require specialized knowledge with extensive context, or when sequential constraints need to be enforced.\n\nYou can use the **Subagents** pattern [1], where a main agent coordinates subagents as tools, all routing passes through the main agent, which decides when and how to invoke each subagent. Alternatively, you can use the **Handoffs** pattern [1], where behavior changes dynamically based on state, and tool calls update a state variable that triggers routing or configuration changes.\n\nYou can also use the **Skills** pattern [1], where specialized prompts and knowledge are loaded on-demand, and a single agent stays in control while loading context from skills as needed. If you need to route input and results, you can use the **Router** pattern [1].\n\nThe context also mentions that you can mix patterns, for example, a **subagents** architecture can invoke tools that invoke custom workflows or router agents [4]. Subagents can even use the **skills** pattern to load context on-demand [4]. The possibilities are endless!",
+    "sources": [
+      "langchain_multi_agent.md",
+      "langchain_multi_agent.md",
+      "langchain_multi_agent.md",
+      "langchain_multi_agent.md"
+    ],
+    "retrieved_chunk_ids": [
+      "langchain_multi_agent.md::3",
+      "langchain_multi_agent.md::0",
+      "langchain_multi_agent.md::2",
+      "langchain_multi_agent.md::6"
+    ]
+  },
+  {
+    "question": "How do I select and configure a chat model in LangChain?",
+    "answer": "To select and configure a chat model in LangChain, you can use the `@initChatModel` method, as described in [1] and [2]. This method allows you to initialize a chat model from a provider of your choice.\n\nTo configure the model, you can pass parameters to the `@initChatModel` method, as mentioned in [1] and [2]. The parameters can be used to customize the model's behavior, but the specific parameters and their usage are not described in the provided context.\n\nNote that the context does not provide a detailed explanation of how to select and configure a chat model, but it does provide a general outline of how to use the `@initChatModel` method.",
+    "sources": [
+      "langchain_models.md",
+      "langchain_models.md",
+      "langchain_messages.md",
+      "langchain_models.md"
+    ],
+    "retrieved_chunk_ids": [
+      "langchain_models.md::4",
+      "langchain_models.md::6",
+      "langchain_messages.md::24",
+      "langchain_models.md::65"
+    ]
+  },
+  {
+    "question": "What's the difference between a Task's expected output and its context in CrewAI?",
+    "answer": "A Task's expected output and its context are two distinct concepts in CrewAI. The expected output is the specific output that a task is expected to produce, which can be specified in the task's properties (see [3]). On the other hand, the context of a task is the output of other tasks that is used as input for the current task, which can be specified using the `context` attribute of the task (see [2]). In other words, the expected output is what the task is supposed to produce, while the context is what the task is based on.\n\nTo illustrate the difference, consider the example in [2], where the `write_blog_task` has a context of `[research_ai_task, research_ops_task]`, meaning it is based on the output of those two tasks. However, the expected output of the `write_blog_task` is still a \"Full blog post that is 4 paragraphs long\" (see [2]).",
+    "sources": [
+      "crewai_tasks.md",
+      "crewai_tasks.md",
+      "crewai_tasks.md",
+      "crewai_crews.md"
+    ],
+    "retrieved_chunk_ids": [
+      "crewai_tasks.md::13",
+      "crewai_tasks.md::40",
+      "crewai_tasks.md::0",
+      "crewai_crews.md::21"
+    ]
+  },
+  {
+    "question": "How do I fine-tune a Transformer model with the HuggingFace Trainer API?",
+    "answer": "Sorry, but I don't have enough information to answer the question.",
+    "sources": [
+      "langchain_models.md",
+      "langchain_models.md",
+      "crewai_agents.md",
+      "crewai_memory.md"
+    ],
+    "retrieved_chunk_ids": [
+      "langchain_models.md::53",
+      "langchain_models.md::50",
+      "crewai_agents.md::15",
+      "crewai_memory.md::35"
+    ]
+  }
+]
